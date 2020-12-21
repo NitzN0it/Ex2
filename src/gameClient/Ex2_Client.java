@@ -25,7 +25,7 @@ public class Ex2_Client implements Runnable{
 	
 	@Override
 	public void run() {
-		int scenario_num = 1;
+		int scenario_num = 0;
 		game_service game = Game_Server_Ex2.getServer(scenario_num); // you have [0,23] games
 	//	int id = 999;
 	//	game.login(id);
@@ -208,24 +208,14 @@ public class Ex2_Client implements Runnable{
 			List<CL_Pokemon> cl_fs = _ar.getPokemons();
 			for(int a = 0;a<cl_fs.size();a++) { _ar.updateEdge(cl_fs.get(a),gg);}
 			List<CL_Agent> ags = new LinkedList<>();
-
-			for(int a = 0;a<agents_num;a++) {
-				CL_Agent agent = new CL_Agent(gg,0);
-				ags.add(agent);
-				/*
-				int ind = a%cl_fs.size();
-				CL_Pokemon c = cl_fs.get(ind);
-				int nn = c.get_edge().getDest();
-				if(c.getType()<0 ) {nn = c.get_edge().getSrc();}
-
-				 */
-
-			}
+			for (int i = 0; i < agents_num; i++) { CL_Agent agent = new CL_Agent(gg,0); ags.add(agent);}
 			agents_algos.updateAlgos(cl_fs,ags,gg);
 			for (int i = 0; i < agents_num; i++) {
-				game.addAgent(agents_algos.src_node_for_agent(i));
+				int temp = agents_algos.src_node_for_agent(i);
+				System.out.println("Agent first node is:"+temp);
+				game.addAgent(temp);
 			}
-
+			_ar.setAgents(agents_algos.getAgentList());
 		}
 		catch (JSONException e) {e.printStackTrace();}
 	}
