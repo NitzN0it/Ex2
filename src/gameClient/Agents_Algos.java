@@ -57,7 +57,7 @@ public class Agents_Algos {
     }
     private void fix_direction (CL_Pokemon pokemon)
     {
-        if (pokemon.getType() == 1)
+        if (pokemon.getType() == -1)
         {
             if (pokemon.get_edge().getSrc() < pokemon.get_edge().getDest())
             {
@@ -82,9 +82,8 @@ public class Agents_Algos {
         if (has_2way_edge(pokemon.get_edge()))
             fix_direction(pokemon);
         System.out.println(pokemon.get_edge().getSrc() +"--->" + pokemon.get_edge().getDest());
-        int dest = pokemon.get_edge().getDest();
-        if (pokemon.get_edge().getSrc() == src) return dest;
-        if (src == dest) return pokemon.get_edge().getSrc();
+        int dest = pokemon.get_edge().getSrc();
+        if (src == dest) return pokemon.get_edge().getDest();
         List<node_data> lst = graph_algo.shortestPath(src,dest);
         for (node_data n : lst)
         {
