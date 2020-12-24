@@ -20,6 +20,12 @@ public class Agents_Algos {
     {
         pokemons.clear();
         pokemons.addAll(pks);
+        set_agents_to_pokemons(agts);
+        graph=g;
+        graph_algo.init(g);
+    }
+    private void set_agents_to_pokemons(List<CL_Agent> agts)
+    {
         if (agentList == null)
             agentList=agts;
         else
@@ -28,27 +34,41 @@ public class Agents_Algos {
             agentList = agts;
             for (CL_Agent agent:agentList) {
                 CL_Pokemon curr_fruit = temp.get(agent.getID()).get_curr_fruit();
-                if (pokemons.contains(curr_fruit))
+                if ((curr_fruit == null) || (!pokemons.contains(curr_fruit)))
+                {
+                    curr_fruit=pokemons.remove();
                     agent.set_curr_fruit(curr_fruit);
+                }
                 else
-                    agent.set_curr_fruit(pokemons.remove());
+                {
+                    fix_taken_pokemon(agent);
+
+                }
             }
         }
-        graph=g;
-        graph_algo.init(g);
+    }
+    private void fix_taken_pokemon(CL_Agent age)
+    {
+        for (CL_Agent agent:agentList) {
+            if((age.get_curr_fruit().getValue() == agent.get_curr_fruit().getValue()) && (agent != age))
+            {
+                while (age.get_curr_fruit() == agent.get_curr_fruit())
+                {
+                    age.set_curr_fruit(pokemons.remove());
+                }
+            }
+        }
     }
     public int src_node_for_agent(int i)
     {
-        System.out.println(agentList.size());
         List<CL_Pokemon> temp = new LinkedList<>();
         for (int j = 0; j <= i; j++) {
             temp.add(pokemons.remove());
         }
         pokemons.addAll(temp);
         agentList.get(i).set_curr_fruit(temp.get(i));
-        if (temp.get(i).getType() == -1)
-            return temp.get(i).get_edge().getSrc();
-        return temp.get(i).get_edge().getDest();
+        int estimated_best_src = temp.get(i).get_edge().getSrc();
+        return agentList.get(i).get_curr_fruit().get_edge().getSrc();
     }
     public List<CL_Agent> getAgentList() { return agentList;}
     private boolean has_2way_edge (edge_data e)
@@ -93,8 +113,7 @@ public class Agents_Algos {
         return lst.get(1).getKey();
     }
 }
-class PokemonComparator implements Comparator<CL_Pokemon>
-{
+class PokemonComparator implements Comparator<CL_Pokemon> {
     @Override
     public int compare(CL_Pokemon o1, CL_Pokemon o2) {
         if (o1.getValue() > o2.getValue())
@@ -104,14 +123,6 @@ class PokemonComparator implements Comparator<CL_Pokemon>
         return 0;
     }
 }
-
-
-
-
-
-
-
-
 
 
 /*

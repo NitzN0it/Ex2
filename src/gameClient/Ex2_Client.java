@@ -25,29 +25,29 @@ public class Ex2_Client implements Runnable{
 	
 	@Override
 	public void run() {
-		int scenario_num = 0;
-		game_service game = Game_Server_Ex2.getServer(scenario_num); // you have [0,23] games
-	//	int id = 999;
-	//	game.login(id);
-		init(game);
-		game.startGame();
-		_win.setTitle("Ex2 - OOP: (NONE trivial Solution) "+game.toString());
-		int ind=0;
-		long dt=100;
-		while(game.isRunning()) {
-			moveAgants(game, gg);
-			try {
-				if(ind%1==0) {_win.repaint();}
-				Thread.sleep(dt);
-				ind++;
+			int scenario_num = 11;
+			game_service game = Game_Server_Ex2.getServer(scenario_num); // you have [0,23] games
+			//int id = 311318612;
+			//game.login(id);
+			init(game);
+			game.startGame();
+			_win.setTitle("Ex2 - OOP: (NONE trivial Solution) " + game.toString());
+			int ind = 0;
+			long dt = 100;
+			while (game.isRunning()) {
+				moveAgants(game, gg);
+				try {
+					if (ind % 1 == 0) {
+						_win.repaint();
+					}
+					Thread.sleep(dt);
+					ind++;
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
-			catch(Exception e) {
-				e.printStackTrace();
-			}
-		}
-		String res = game.toString();
-
-		System.out.println(res);
+			String res = game.toString();
+			System.out.println(res);
 		System.exit(0);
 	}
 	/** 
@@ -81,108 +81,6 @@ public class Ex2_Client implements Runnable{
 			}
 		}
 	}
-	/**
-	 * a very simple random walk implementation!
-	 * @param g
-	 * @param src
-	 * @return
-	 */
-	private static boolean has_2way_edge (edge_data e)
-	{
-		return gg.getEdge(e.getDest(),e.getSrc()) != null;
-	}
-	private static void fix_direction (CL_Pokemon pokemon)
-	{
-		if (pokemon.getType() == -1)
-		{
-			if (pokemon.get_edge().getSrc() < pokemon.get_edge().getDest())
-			{
-				edge_data temp = new EdgeData(pokemon.get_edge().getDest(),pokemon.get_edge().getSrc(),pokemon.get_edge().getWeight());
-				pokemon.set_edge(temp);
-			}
-		}
-		else
-		{
-			if (pokemon.get_edge().getSrc() > pokemon.get_edge().getDest())
-			{
-				edge_data temp = new EdgeData(pokemon.get_edge().getDest(),pokemon.get_edge().getSrc(),pokemon.get_edge().getWeight());
-				pokemon.set_edge(temp);
-			}
-		}
-	}
-	private static int nextNode(directed_weighted_graph g, int src) {
-		//return agents_algos.agent_NextNode(_ar.ge)
-
-
-		List<CL_Pokemon> pokemons = _ar.getPokemons();
-		double min = Double.MAX_VALUE;
-		double max_value = Double.MIN_VALUE;
-		CL_Pokemon pokemon = pokemons.get(0);
-		for (CL_Pokemon pok : pokemons) // find the pokemon with the most value
-		{
-			if (pok.getValue() > max_value)
-			{
-				max_value = pok.getValue();
-				pokemon = pok;
-			}
-		}
-				System.out.println("Agent's node:"+src+" pokemon type:"+pokemon.getType()+" from:"+pokemon.get_edge().getSrc() +"--->" + pokemon.get_edge().getDest());
-				System.out.println("pokemon has 2way edge:"+has_2way_edge(pokemon.get_edge()));
-		if (has_2way_edge(pokemon.get_edge()))
-			fix_direction(pokemon);
-		System.out.println(pokemon.get_edge().getSrc() +"--->" + pokemon.get_edge().getDest());
-
-		int dest = pokemon.get_edge().getDest();
-		if (pokemon.get_edge().getSrc() == src) return dest;
-		if (src == dest) return pokemon.get_edge().getSrc();
-		List<node_data> lst = graph_algo.shortestPath(src,dest);
-		for (node_data n : lst)
-		{
-			System.out.print(n.getKey()+"->");
-		}
-		System.out.println("Go to:"+ lst.get(1).getKey());
-		return lst.get(1).getKey();
-		/*
-		for (CL_Pokemon pokemon:pokemons) {
-			System.out.println(pokemon.get_edge().getSrc() +"->" + pokemon.get_edge().getDest());
-			int dest = pokemon.get_edge().getDest();
-			if (pokemon.get_edge().getSrc() == src) { ans=dest; break;}
-			if (dest == src) dest = 0;
-			/*
-			int dest = 0;
-			if (pokemon.getType() < 0)
-				dest = pokemon.get_edge().getSrc();
-			else
-				dest = pokemon.get_edge().getDest();
-
-			if (src == dest)
-			{
-				dest = pokemon.get_edge().getSrc();
-			}
-
-
-			List<node_data> lst = graph_algo.shortestPath(src,dest);
-			double path = lst.size();
-			System.out.println(path);
-			if (path < min)
-			{
-				min = path;
-				ans = lst.get(1).getKey();
-			}
-		}
-		System.out.println("move to "+ans);
-	*/
-		//return ans;
-	}
-	private int find_into_node_edge(int node)
-	{
-		for (node_data n: gg.getV())
-		{
-
-		}
-		return 3;
-	}
-
 	private void init(game_service game) {
 		String g = game.getGraph();
 		graph_json_parser graph_parser = new graph_json_parser(g);
