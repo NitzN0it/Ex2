@@ -14,6 +14,7 @@ public class Agents_Algos {
     private directed_weighted_graph graph;
     private dw_graph_algorithms graph_algo = new DWGraph_Algo();
 
+        private List<CL_Pokemon> pokemonList = new LinkedList<>();
 
     public Agents_Algos(){}
     public void updateAlgos(List<CL_Pokemon> pks, List<CL_Agent> agts, directed_weighted_graph g)
@@ -24,6 +25,24 @@ public class Agents_Algos {
         graph=g;
         graph_algo.init(g);
     }
+    private void update_agents_location(List<CL_Agent> agts)
+    {
+        if (agentList == null)
+        {
+            agentList=new LinkedList<>();
+            for (CL_Agent agent:agts) {
+                agentList.add(agent);
+            }
+        }
+        else
+        {
+            for (CL_Agent agent:agts) {
+                agentList.get(agent.getID()).setCurrNode(agent.getSrcNode());
+            }
+        }
+
+    }
+    /*
     private void set_agents_to_pokemons(List<CL_Agent> agts)
     {
         if (agentList == null)
@@ -36,6 +55,7 @@ public class Agents_Algos {
                 CL_Pokemon curr_fruit = temp.get(agent.getID()).get_curr_fruit();
                 if ((curr_fruit == null) || (!pokemons.contains(curr_fruit)))
                 {
+                    System.out.println("EMPTY FRUIT");
                     curr_fruit=pokemons.remove();
                     agent.set_curr_fruit(curr_fruit);
                 }
@@ -47,6 +67,24 @@ public class Agents_Algos {
             }
         }
     }
+
+     */
+    private void set_agents_to_pokemons(List<CL_Agent> agts) {
+
+        update_agents_location(agts);
+        List<CL_Agent> temp = agentList;
+        for (CL_Agent agent : agentList) {
+            CL_Pokemon curr_fruit = agent.get_curr_fruit();
+            if ((curr_fruit == null) || (!pokemons.contains(curr_fruit))) {
+                curr_fruit = pokemons.remove();
+                agent.set_curr_fruit(curr_fruit);
+            } else {
+                fix_taken_pokemon(agent);
+
+            }
+        }
+    }
+
     private void fix_taken_pokemon(CL_Agent age)
     {
         for (CL_Agent agent:agentList) {
@@ -123,8 +161,6 @@ class PokemonComparator implements Comparator<CL_Pokemon> {
         return 0;
     }
 }
-
-
 /*
 public class Agents_Algos {
     private PriorityQueue<CL_Pokemon> pokemons = new PriorityQueue<>(new PokemonComparator());

@@ -27,8 +27,8 @@ public class Ex2_Client implements Runnable{
 	public void run() {
 			int scenario_num = 11;
 			game_service game = Game_Server_Ex2.getServer(scenario_num); // you have [0,23] games
-			//int id = 311318612;
-			//game.login(id);
+			int id = 311318612;
+			game.login(id);
 			init(game);
 			game.startGame();
 			_win.setTitle("Ex2 - OOP: (NONE trivial Solution) " + game.toString());
